@@ -1,0 +1,23 @@
+#define path if open new command prompt
+#follow the instruction on https://github.com/EdjeElectronics/TensorFlow-Object-Detection-API-Tutorial-Train-Multiple-Objects-Windows-10
+
+
+#define path - pay attention the the folder name tensorflow1
+set PYTHONPATH=C:\tensorflow1\models;C:\tensorflow1\models\research;C:\tensorflow1\models\research\slim
+set PATH=%PATH%;PYTHONPATH
+
+
+#create csv file
+python xml_to_csv.py
+
+#crate .record files
+python generate_tfrecord.py --csv_input=images\train_labels.csv --image_dir=images\train --output_path=train.record
+python generate_tfrecord.py --csv_input=images\test_labels.csv --image_dir=images\test --output_path=test.record
+
+#start training
+python model_main.py --logtostderr --train_dir=training/ --pipeline_config_path=training/faster_rcnn_inception_v2_pets.config
+
+
+#see actual training
+tensorboard --logdir=training
+
